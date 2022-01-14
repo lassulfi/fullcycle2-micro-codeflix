@@ -8,6 +8,7 @@ import Title from "./Title";
 import SearchIcon from "@material-ui/icons/Search";
 import { useCallback, useContext } from "react";
 import DialogSearchContext from "../DialogSearch/DialogSearchContext";
+import HideOnScroll from "./HideOnScroll";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,30 +29,32 @@ const Navbar: React.FunctionComponent = () => {
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed">
-                <Toolbar>
-                    {!isSmallWindow && <MenuCategories />}
-                    <Title />
-                    {!isSmallWindow && (
-                        <>
-                            <Grid container justify="center">
-                                <Grid item xs={8} lg={7}>
-                                    <InputSearch />
+            <HideOnScroll>
+                <AppBar position="fixed">
+                    <Toolbar>
+                        {!isSmallWindow && <MenuCategories />}
+                        <Title />
+                        {!isSmallWindow && (
+                            <>
+                                <Grid container justify="center">
+                                    <Grid item xs={8} lg={7}>
+                                        <InputSearch />
+                                    </Grid>
                                 </Grid>
+                                <Notifications />
+                                <MenuAccount />
+                            </>
+                        )}
+                        {isSmallWindow && (
+                            <Grid container justify="flex-end">
+                                <IconButton onClick={handleOpen}>
+                                    <SearchIcon />
+                                </IconButton>
                             </Grid>
-                            <Notifications />
-                            <MenuAccount />
-                        </>
-                    )}
-                    {isSmallWindow && (
-                        <Grid container justify="flex-end">
-                            <IconButton onClick={handleOpen}>
-                                <SearchIcon />
-                            </IconButton>
-                        </Grid>
-                    )}
-                </Toolbar>
-            </AppBar>
+                        )}
+                    </Toolbar>
+                </AppBar>
+            </HideOnScroll>
         </div>
     );
 }
