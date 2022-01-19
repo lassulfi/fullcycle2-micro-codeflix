@@ -19,7 +19,7 @@ const Slider: React.FunctionComponent<SliderProps> = (props) => {
     const classes = useStyles()
     const className = clsx(classes.root, other.className);
 
-    return <ReactSlider className={className} {...other}>{children}</ReactSlider>;
+    return <ReactSlider {...other} className={className}>{children}</ReactSlider>;
 }
  
 export default Slider;

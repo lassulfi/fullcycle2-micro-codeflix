@@ -1,13 +1,16 @@
-import { makeStyles } from "@material-ui/core";
+import { fade, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
+import { CustomArrowProps } from "react-slick";
 import SliderArrowUnstyled from "./SliderArrowUnstyled";
 
 const useStyles = makeStyles(theme => ({
     root: (props: SliderArrowProps) => {
         const style = {
+            display: "flex",
             height: "100%",
             position: "absolute" as any,
             opacity: 0,
+            zIndex: 999,
         };
 
         if (props.dir === "right") {
@@ -16,6 +19,12 @@ const useStyles = makeStyles(theme => ({
         }
 
         return style;
+    },
+    iconButtonRoot: {
+        borderRadius: 0,
+        "&:hover": {
+            backgroundColor: fade(theme.palette.background.default, 0.35),
+        },
     },
     arrow: {
         fontSize: 50,
@@ -26,12 +35,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-interface SliderArrowProps {
+interface SliderArrowProps extends CustomArrowProps {
     dir: "left" | "right";
 }
 
 const SliderArrow: React.FunctionComponent<SliderArrowProps> = (props) => {
-    const { dir } = props;
+    // more props - style, currentSlide, slideCount
+    const { dir, className, onClick } = props;
     const classes = useStyles(props);
 
     return (
@@ -40,7 +50,12 @@ const SliderArrow: React.FunctionComponent<SliderArrowProps> = (props) => {
         >
             <SliderArrowUnstyled 
                 dir={dir} 
-                IconButtonProps={{ disableTouchRipple: true }}
+                IconButtonProps={{ 
+                    classes: { root: classes.iconButtonRoot },
+                    onClick,
+                    disabled: className?.includes("disabled"),
+                    disableTouchRipple: true,
+                 }}
                 classes={{ arrow: classes.arrow }} 
             />
         </div>
