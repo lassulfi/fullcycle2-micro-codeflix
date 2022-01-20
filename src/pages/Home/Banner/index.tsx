@@ -1,16 +1,18 @@
 import { Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import { useMemo } from "react";
-import Page from "../components/Page";
-import Slider, { SliderProps } from "../components/Slider";
-import SliderArrow from "../components/Slider/SliderArrow";
-import VideoThumbnail from "../components/Video/VideoThumbnail";
-import useIsSmallWindow from "../hooks/useIsSmallWindow";
-import banner from "../static/img/1-vid-banner-01.jpg";
-import bannerHalf from "../static/img/1-vid-banner-half.jpg" 
+import Slider, { SliderProps } from "../../../components/Slider";
+import SliderArrow from "../../../components/Slider/SliderArrow";
+import Category from "../../../components/Video/Category";
+import VideoThumbnail from "../../../components/Video/VideoThumbnail";
+import useIsSmallWindow from "../../../hooks/useIsSmallWindow";
+import banner from "../../../static/img/1-vid-banner-01.jpg";
+import bannerHalf from "../../../static/img/1-vid-banner-half.jpg" 
+import BannerRating from "./BannerRating";
 
 const useStyles = makeStyles((theme: Theme) => ({
     rootImage: {
+        position: "relative",
         marginRight: "4px",
         "&:focus": {
             outlineColor: theme.palette.text.primary,
@@ -46,11 +48,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
 }))
 
-const Home: React.FunctionComponent = (props) => {
+const Banner: React.FunctionComponent = (props) => {
     const classes = useStyles();
     const isSmallWindow = useIsSmallWindow();
+    const classSlider = classes.slider;
     const sliderProps: SliderProps = useMemo(() => ({
-        className: classes.slider,
+        className: classSlider,
         centerMode: false,
         dots: false,
         infinite: true,
@@ -61,39 +64,29 @@ const Home: React.FunctionComponent = (props) => {
         arrows: !isSmallWindow,
         prevArrow: <SliderArrow dir="left" />,
         nextArrow: <SliderArrow dir="right" />,
-    }), [isSmallWindow]);
+    }), [isSmallWindow, classSlider]);
     const thumbnail = isSmallWindow ? bannerHalf : banner;
 
     return (
-        <Page>
+        <div>
+            <Category>Filmes</Category>
             <Slider {...sliderProps}>
                 <div>
-                    <VideoThumbnail 
-                        classes={{ root: classes.rootImage, image: classes.image }}
-                        ImgProps={{ src: thumbnail, }}
-                    />
-                </div>
-                <div>
-                    <VideoThumbnail 
-                       classes={{ root: classes.rootImage, image: classes.image }}
-                        ImgProps={{ src: thumbnail, }}
-                    />
-                </div>
-                <div>
-                    <VideoThumbnail 
-                       classes={{ root: classes.rootImage, image: classes.image }}
-                        ImgProps={{ src: thumbnail, }}
-                    />
-                </div>
-                <div>
-                    <VideoThumbnail 
-                       classes={{ root: classes.rootImage, image: classes.image }}
-                        ImgProps={{ src: thumbnail, }}
-                    />
+                    {Array.from(new Array(6).keys())
+                    .map(() => thumbnail)
+                    .map((v) => (
+                        <VideoThumbnail 
+                            key={v}
+                            classes={{ root: classes.rootImage, image: classes.image }}
+                            ImgProps={{ src: thumbnail, }}
+                        >
+                            <BannerRating rating="14"/>
+                        </VideoThumbnail>
+                    ))}
                 </div>
             </Slider>
-        </Page>
+        </div>
     );
 };
 
-export default Home;
+export default Banner;
