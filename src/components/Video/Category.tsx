@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     },
 })
 
-interface CategoryProps {
+export interface CategoryProps {
     className?: any;
 }
  

@@ -3,12 +3,13 @@ import { makeStyles } from "@material-ui/styles";
 import { useMemo } from "react";
 import Slider, { SliderProps } from "../../../components/Slider";
 import SliderArrow from "../../../components/Slider/SliderArrow";
-import Category from "../../../components/Video/Category";
+import Title from "../../../components/Video/Title";
 import VideoThumbnail from "../../../components/Video/VideoThumbnail";
 import useIsSmallWindow from "../../../hooks/useIsSmallWindow";
 import banner from "../../../static/img/1-vid-banner-01.jpg";
-import bannerHalf from "../../../static/img/1-vid-banner-half.jpg" 
+import bannerHalf from "../../../static/img/1-vid-banner-half.jpg"
 import BannerRating from "./BannerRating";
+import VideoContent from "./VideoContent";
 
 const useStyles = makeStyles((theme: Theme) => ({
     rootImage: {
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     get slider() {
         return Object.fromEntries(
             Object.entries(this.image).map(size => [
-                size[0], 
+                size[0],
                 {
                     "& .slick-list, & .slick-track": { height: size[1].height },
                 }
@@ -65,26 +66,36 @@ const Banner: React.FunctionComponent = (props) => {
         prevArrow: <SliderArrow dir="left" />,
         nextArrow: <SliderArrow dir="right" />,
     }), [isSmallWindow, classSlider]);
-    const thumbnail = isSmallWindow ? bannerHalf : banner;
+    const thumbnail = isSmallWindow ? banner : bannerHalf;
 
     return (
         <div>
-            <Category>Filmes</Category>
             <Slider {...sliderProps}>
-                <div>
-                    {Array.from(new Array(6).keys())
+                {Array.from(new Array(6).keys())
                     .map(() => thumbnail)
                     .map((v) => (
-                        <VideoThumbnail 
+                        <VideoThumbnail
                             key={v}
                             classes={{ root: classes.rootImage, image: classes.image }}
                             ImgProps={{ src: thumbnail, }}
                         >
-                            <BannerRating rating="14"/>
+                            <VideoContent video={{
+                                id: "0000",
+                                title: "Aladdin",
+                                categories: [
+                                    {
+                                        id: "0000",
+                                        name: "Filmes",
+                                        is_active: true,
+                                    }
+                                ]
+                            }} />
+                            <BannerRating rating="14" />
                         </VideoThumbnail>
-                    ))}
-                </div>
+                    ))
+                }
             </Slider>
+            <Title>Aladdin</Title>
         </div>
     );
 };
