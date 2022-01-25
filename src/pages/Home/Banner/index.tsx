@@ -3,12 +3,13 @@ import { makeStyles } from "@material-ui/styles";
 import { useMemo } from "react";
 import Slider, { SliderProps } from "../../../components/Slider";
 import SliderArrow from "../../../components/Slider/SliderArrow";
-import Title from "../../../components/Video/Title";
 import VideoThumbnail from "../../../components/Video/VideoThumbnail";
 import useIsSmallWindow from "../../../hooks/useIsSmallWindow";
 import banner from "../../../static/img/1-vid-banner-01.jpg";
 import bannerHalf from "../../../static/img/1-vid-banner-half.jpg"
 import BannerRating from "./BannerRating";
+import SliderStepper from "./SliderStepper";
+import VideoActionsMobile from "./VideoActions/VideoActionsMobile";
 import VideoContent from "./VideoContent";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -95,7 +96,8 @@ const Banner: React.FunctionComponent = (props) => {
                     ))
                 }
             </Slider>
-            <Title>Aladdin</Title>
+            {!isSmallWindow && <SliderStepper maxSteps={5} activeStep={0}/>}
+            <VideoActionsMobile />
         </div>
     );
 };

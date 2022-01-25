@@ -3,22 +3,20 @@ import Category, { CategoryProps } from "../../../components/Video/Category";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        position: "absolute",
-        bottom: 0,
-        marginBottom: 30,
-        left: 4,
-        padding: 4,
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        [theme.breakpoints.down(theme.breakpoints.values.mobile)]: {
+            position: "absolute",
+            bottom: 0,
+            marginBottom: 4,
+            left: 4,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+        },
     },
     category: {
+        fontSize: "1.4em",
+        borderBottomWidth: "2px",
         [theme.breakpoints.down("sm")]: {
             fontSize: "0.8em",
-            borderBottomWidth: "2px",
         }, 
-        [theme.breakpoints.up("sm")]: {
-            fontSize: "1.4em",
-            borderBottomWidth: "5px",
-        },
         [theme.breakpoints.up("lg")]: {
             fontSize: "1.6em",
         }
