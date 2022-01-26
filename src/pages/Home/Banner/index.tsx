@@ -1,6 +1,6 @@
 import { Theme } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Slider, { SliderProps } from "../../../components/Slider";
 import SliderArrow from "../../../components/Slider/SliderArrow";
 import VideoThumbnail from "../../../components/Video/VideoThumbnail";
@@ -54,6 +54,7 @@ const Banner: React.FunctionComponent = (props) => {
     const classes = useStyles();
     const isSmallWindow = useIsSmallWindow();
     const classSlider = classes.slider;
+    const [activeIndex, setActiveIndex] = useState(0);
     const sliderProps: SliderProps = useMemo(() => ({
         className: classSlider,
         centerMode: false,
@@ -66,6 +67,9 @@ const Banner: React.FunctionComponent = (props) => {
         arrows: !isSmallWindow,
         prevArrow: <SliderArrow dir="left" />,
         nextArrow: <SliderArrow dir="right" />,
+        beforeChange: (currentIndex, nextIndex) => {
+            setActiveIndex(nextIndex);
+        }
     }), [isSmallWindow, classSlider]);
     const thumbnail = isSmallWindow ? banner : bannerHalf;
 
@@ -74,29 +78,32 @@ const Banner: React.FunctionComponent = (props) => {
             <Slider {...sliderProps}>
                 {Array.from(new Array(6).keys())
                     .map(() => thumbnail)
-                    .map((v) => (
-                        <VideoThumbnail
-                            key={v}
-                            classes={{ root: classes.rootImage, image: classes.image }}
-                            ImgProps={{ src: thumbnail, }}
-                        >
-                            <VideoContent video={{
-                                id: "0000",
-                                title: "Aladdin",
-                                categories: [
-                                    {
-                                        id: "0000",
-                                        name: "Filmes",
-                                        is_active: true,
-                                    }
-                                ]
-                            }} />
-                            <BannerRating rating="14" />
-                        </VideoThumbnail>
-                    ))
+                    .map((v, index) => {
+                        const show = activeIndex === index;
+                        return (
+                            <VideoThumbnail
+                                key={v}
+                                classes={{ root: classes.rootImage, image: classes.image }}
+                                ImgProps={{ src: thumbnail, }}
+                            >
+                                {show && <VideoContent video={{
+                                    id: "0000",
+                                    title: "Aladdin",
+                                    categories: [
+                                        {
+                                            id: "0000",
+                                            name: "Filmes",
+                                            is_active: true,
+                                        }
+                                    ]
+                                }} />}
+                                {show && <BannerRating rating="14" />}
+                            </VideoThumbnail>
+                        )
+                    })
                 }
             </Slider>
-            {!isSmallWindow && <SliderStepper maxSteps={5} activeStep={0}/>}
+            {!isSmallWindow && <SliderStepper maxSteps={6} activeStep={activeIndex} />}
             <VideoActionsMobile />
         </div>
     );
